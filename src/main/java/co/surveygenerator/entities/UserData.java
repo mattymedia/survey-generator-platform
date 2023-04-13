@@ -1,18 +1,19 @@
 package co.surveygenerator.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import co.surveygenerator.security.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users_data")
@@ -22,25 +23,24 @@ public class UserData implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@OneToOne
-	private User user;
+	@Column(name = "user_id")
+	private Integer userId;
 	
-	@NotNull
-	@NotEmpty
 	private String name;
 
-	@NotNull
-	@NotEmpty
 	private String surname;
 
 	@Email
 	private String email;
 	
+	@OneToMany(mappedBy = "userData", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Survey> surveys;
+	
 	public UserData() {}
 		
-	public UserData(User user, @NotNull @NotEmpty String name, @NotNull @NotEmpty String surname,
-			@Email String email) {
-		this.user = user;
+	public UserData(Integer userId,  String name,  String surname, @Email String email) {
+		this.userId = userId;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -54,12 +54,12 @@ public class UserData implements Serializable {
 		this.id = id;
 	}
 	
-	public User getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {
@@ -85,6 +85,16 @@ public class UserData implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public List<Survey> getSurveys() {
+		return surveys;
+	}
+
+	public void setSurveys(List<Survey> surveys) {
+		this.surveys = surveys;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.surveygenerator.dto.Message;
+import co.surveygenerator.entities.UserData;
 import co.surveygenerator.security.dto.JwtDto;
 import co.surveygenerator.security.dto.LoginUser;
 import co.surveygenerator.security.dto.NewUser;
@@ -27,9 +28,10 @@ import co.surveygenerator.security.enums.RoleListEnum;
 import co.surveygenerator.security.jwt.JwtProvider;
 import co.surveygenerator.security.services.RoleService;
 import co.surveygenerator.security.services.UserService;
+import co.surveygenerator.services.IUserDataService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/surveygenerator/auth")
 public class AuthController {
 	
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -37,14 +39,16 @@ public class AuthController {
     private final UserService userService;
     private final RoleService roleService;
     private final JwtProvider jwtProvider;
+    private final IUserDataService userDataService;
     
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, PasswordEncoder passwordEncoder,
-            UserService userService, RoleService roleService, JwtProvider jwtProvider) {
+            UserService userService, RoleService roleService, JwtProvider jwtProvider, IUserDataService userDataService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
         this.jwtProvider = jwtProvider;
+        this.userDataService = userDataService;
     }
     
     @PostMapping("/login")
@@ -68,12 +72,17 @@ public class AuthController {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>(new Message("Revise los campos e intente nuevamente"), HttpStatus.BAD_REQUEST);
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()));
+        UserData userData = new UserData();        
         Set<Role> roles = new HashSet<>();
+        
         roles.add(roleService.getByRoleName(RoleListEnum.ROLE_USER).get());
         if (newUser.getRoles().contains("admin"))
             roles.add(roleService.getByRoleName(RoleListEnum.ROLE_ADMIN).get());
         user.setRoles(roles);
         userService.save(user);
+        userData.setUserId(user.getId());
+        userDataService.save(userData);
+        
         return new ResponseEntity<>(new Message("Registro exitoso! Inicie sesión"), HttpStatus.CREATED);
     }
 

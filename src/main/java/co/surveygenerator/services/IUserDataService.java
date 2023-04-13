@@ -4,10 +4,14 @@ import java.util.List;
 
 import co.surveygenerator.entities.UserData;
 
-public interface UserDataService {
+public interface IUserDataService {
 
 	public List<UserData> findAll();
 	
+	public UserData findById(Integer id);
+		
 	public UserData save(UserData userData);
+	
+	public Integer getCurrentUser();
 	
 }
