@@ -39,8 +39,7 @@ public class UserData implements Serializable {
 	
 	public UserData() {}
 		
-	public UserData(Integer userId,  String name,  String surname, @Email String email) {
-		this.userId = userId;
+	public UserData( String name,  String surname, @Email String email) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;

@@ -34,7 +34,6 @@ public class UserDataController {
 	@PreAuthorize("hasRole('USER')")
 	@PutMapping("/edit")
 	public ResponseEntity<Message> edit(@Valid @RequestBody UserDataDto userForm, BindingResult result) {
-			       
 		if(result.hasErrors())
 			return new ResponseEntity<Message>(new Message("The fields are empty or a valid email was not provided."), HttpStatus.BAD_REQUEST);
 		
@@ -46,11 +45,4 @@ public class UserDataController {
 		
 		return new ResponseEntity<Message>(new Message("the user information has been saved."), HttpStatus.OK);
 	}
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/admin")
-	public String admin() {
-		return "este es el perfil admin";
-	}
-
 }
