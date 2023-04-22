@@ -43,7 +43,7 @@ public class SurveyController {
 	@PreAuthorize("hasRole('USER')")	
 	@GetMapping("/user-surveys")
 	public List<Survey> findAllByIdUser(){
-		return surveyService.findAllSurveyByUserId(userDataService.getCurrentUser());	
+		return surveyService.findAllSurveyByUserId(userDataService.getCurrentUserId());	
 	}
 	
 	@PreAuthorize("hasRole('USER')")	
@@ -53,7 +53,7 @@ public class SurveyController {
 		newSurvey.setTitle(surveyDto.getTitle());
 		newSurvey.setSubTitle(surveyDto.getSubTitle());
 		newSurvey.setDescription(surveyDto.getDescription());
-		newSurvey.setUserData(userDataService.findById(userDataService.getCurrentUser()));
+		newSurvey.setUserData(userDataService.findById(userDataService.getCurrentUserId()));
 				
 		surveyService.create(newSurvey);
 		

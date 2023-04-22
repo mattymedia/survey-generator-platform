@@ -1,5 +1,6 @@
 package co.surveygenerator.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,14 @@ import co.surveygenerator.security.entities.User;
 import co.surveygenerator.security.repositories.IUserRepository;
 
 @Service
-public class ImplUserDataService implements IUserDataService{
+public class ImplUserDataService implements IUserDataService {
 
 	@Autowired
 	private IUserDataRepository userDataRepository;
-	
+
 	@Autowired
 	private IUserRepository userRepository;
-	
+
 	@Override
 	public List<UserData> findAll() {
 		return userDataRepository.findAll();
@@ -38,14 +39,24 @@ public class ImplUserDataService implements IUserDataService{
 	public UserData findById(Integer id) {
 		return userDataRepository.findById(id).orElse(null);
 	}
-	
+
 	@Override
-	  public Integer getCurrentUser() {
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String currentUsername = authentication.getName();
-	    
-	    User currentUser = userRepository.findByUsername(currentUsername)
-	        .orElseThrow(() -> new RuntimeException("User not found"));
-	    return currentUser.getId();
-	  }
+	public Integer getCurrentUserId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUsername = authentication.getName();
+
+		User currentUser = userRepository.findByUsername(currentUsername)
+				.orElseThrow(() -> new RuntimeException("User not found"));
+		return currentUser.getId();
+	}
+
+	@Override
+	public LocalDate getCurrentUserCreateAt() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUsername = authentication.getName();
+
+		User currentUser = userRepository.findByUsername(currentUsername)
+				.orElseThrow(() -> new RuntimeException("User not found"));
+		return currentUser.getCreateAt();
+	}
 }

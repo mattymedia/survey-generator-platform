@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -69,10 +70,12 @@ public class AuthController {
         }
     }
     
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody NewUser newUser, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>(new Message("Revise los campos e intente nuevamente"), HttpStatus.BAD_REQUEST);
+        System.out.println("new_user=" + newUser.getUsername());
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()));
         UserData userData = new UserData();        
         Set<Role> roles = new HashSet<>();
@@ -86,6 +89,13 @@ public class AuthController {
         userDataService.save(userData);
         
         return new ResponseEntity<>(new Message("Registro exitoso! Inicie sesión"), HttpStatus.CREATED);
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout() {
+        SecurityContextHolder.clearContext();
+        return new ResponseEntity<>(new Message("Logged out successfully"), HttpStatus.OK);
     }
 
 }

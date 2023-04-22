@@ -20,31 +20,31 @@ import javax.persistence.PrePersist;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private String username;
-	
+
 	private String password;
-	
+
 	@Column(name = "create_at")
 	private LocalDate createAt;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_role", joinColumns = @JoinColumn(name="user_id"),
-     inverseJoinColumns=@JoinColumn(name="role_id"))
-    private Set<Role> roles = new HashSet<>();
-	
-	public User() {}
-	
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	public User() {
+	}
+
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	@PrePersist
 	public void actualDate() {
 		this.createAt = LocalDate.now();
@@ -81,6 +81,14 @@ public class User implements Serializable{
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	
+
+	public LocalDate getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(LocalDate createAt) {
+		this.createAt = createAt;
+	}
+
 	private static final long serialVersionUID = 1L;
 }

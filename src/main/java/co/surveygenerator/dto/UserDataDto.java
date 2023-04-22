@@ -1,29 +1,34 @@
 package co.surveygenerator.dto;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 public class UserDataDto {
-	
-	@NotNull
-	@NotEmpty
+
 	private String name;
 
-	@NotNull
-	@NotEmpty
 	private String surname;
+
+	private String gender;
+
+	private LocalDate createAt;
+
+	private String photo;
 
 	@Email
 	private String email;
-	
-	public UserDataDto() {}
 
-	public UserDataDto(@NotNull @NotEmpty String name, @NotNull @NotEmpty String surname,
-			@Email String email) {
+	public UserDataDto() {
+	}
+
+	public UserDataDto(String name, String surname, String gender, LocalDate createAt, @Email String email, String photo) {
 		this.name = name;
 		this.surname = surname;
+		this.gender = gender;
+		this.createAt = createAt;
 		this.email = email;
+		this.photo = photo;
 	}
 
 	public String getName() {
@@ -48,5 +53,29 @@ public class UserDataDto {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}	
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public LocalDate getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(LocalDate createAt) {
+		this.createAt = createAt;
+	}
 }

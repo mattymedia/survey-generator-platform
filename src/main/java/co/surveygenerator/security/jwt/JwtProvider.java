@@ -33,10 +33,12 @@ private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
         
         logger.info("current_user:" + currentUser.getUsername());
         return Jwts.builder().setSubject(currentUser.getUsername())
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(new Date().getTime() + expiration *1000))
-        .signWith(SignatureAlgorithm.HS512, secret)
-        .compact();
+                .claim("username", currentUser.getUsername()) // Agregar el atributo username
+                .claim("message", "greetings stranger.")
+		        .setIssuedAt(new Date())
+		        .setExpiration(new Date(new Date().getTime() + expiration *1000))
+		        .signWith(SignatureAlgorithm.HS512, secret)
+		        .compact();
     }
 	
 	//Creamos una función que permita obtener el nombre de usuario en el token
