@@ -30,8 +30,13 @@ public class ImplSurveyService implements ISurveyService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Survey> findAll() {
-		// TODO Auto-generated method stub
 		return surveyRepository.findAll();
+	}
+
+
+	@Override
+	public Survey findById(Integer id) {
+		return surveyRepository.findById(id).orElse(null);
 	}
 
 }

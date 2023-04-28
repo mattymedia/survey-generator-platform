@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -28,19 +29,22 @@ public class Survey implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private String title;
-	
+
 	@Column(name = "sub_title")
 	private String subTitle;
-	
+
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@JsonIgnore
 	private UserData userData;
-	
+
+	@OneToOne
+	private Category category;
+
 	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
 	private List<Question> questions;
 
@@ -49,11 +53,16 @@ public class Survey implements Serializable {
 
 	public Survey() {
 	}
+	
+	public Survey(Integer id) {
+		this.id = id;
+	}
 
-	public Survey(String title, String subTitle, String description, List<Question> questions) {
+	public Survey(String title, String subTitle, String description, Category category, List<Question> questions) {
 		this.title = title;
 		this.subTitle = subTitle;
 		this.description = description;
+		this.category = category;
 		this.questions = questions;
 	}
 
@@ -69,7 +78,7 @@ public class Survey implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-		
+
 	public String getTitle() {
 		return title;
 	}
@@ -77,7 +86,7 @@ public class Survey implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public String getSubTitle() {
 		return subTitle;
 	}
@@ -92,6 +101,14 @@ public class Survey implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public List<Question> getQuestions() {

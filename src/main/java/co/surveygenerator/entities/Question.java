@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,16 +33,19 @@ public class Question implements Serializable{
 	@JsonIgnore
 	private Survey survey;
 	
+	@Column(name = "num_question")
+	private Integer numQuestion;
+	
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
 	private List<Option> options;
 	
 	public Question() {}
 
-	public Question(Integer id, String description, Survey survey, List<Option> options) {
-		this.id = id;
+	public Question(String description, Survey survey, Integer numQuestion,List<Option> options) {
 		this.description = description;
 		this.survey = survey;
 		this.options = options;
+		this.numQuestion = numQuestion;
 	}
 
 	public Integer getId() {
@@ -66,6 +70,14 @@ public class Question implements Serializable{
 
 	public void setSurvey(Survey survey) {
 		this.survey = survey;
+	}
+	
+	public Integer getNumQuestion() {
+		return numQuestion;
+	}
+
+	public void setNumQuestion(Integer numQuestion) {
+		this.numQuestion = numQuestion;
 	}
 
 	public List<Option> getOptions() {
