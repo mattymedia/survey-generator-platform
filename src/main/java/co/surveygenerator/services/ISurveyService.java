@@ -14,5 +14,7 @@ public interface ISurveyService {
 	
 	public Survey create(Survey survey);
 	
+	public void delete(Integer id);
+	
 	
 }

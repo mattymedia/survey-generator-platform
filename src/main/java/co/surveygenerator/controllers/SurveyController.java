@@ -2,13 +2,13 @@ package co.surveygenerator.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,73 +32,85 @@ import co.surveygenerator.services.IUserDataService;
 @RequestMapping("/surveygenerator/surveys")
 @CrossOrigin(origins = "http://localhost:4200")
 public class SurveyController {
-		
+
 	@Autowired
-	private IUserDataService userDataService; 
-	
+	private IUserDataService userDataService;
+
 	@Autowired
 	private ISurveyService surveyService;
-		
+
 	@Autowired
 	private IQuestionRepository questionRepository;
-	
+
 	@Autowired
 	private IOptionRepository optionRepository;
-	
+
 	@Autowired
 	private ICategoryRepository categoryRepository;
-	
-	@PreAuthorize("hasRole('USER')")	
-	@GetMapping("/user-surveys")
-	public List<Survey> findAllByIdUser(){
-		return surveyService.findAllSurveyByUserId(userDataService.getCurrentUserId());	
-	}
-	
-	@PreAuthorize("hasRole('USER')")	
-	@PostMapping("/create-survey")
-	public ResponseEntity<Message> create(@RequestBody SurveyDto surveyDto){      
-		Survey newSurvey = new Survey();
-		newSurvey.setTitle(surveyDto.getTitle());
-		//newSurvey.setSubTitle(surveyDto.getSubTitle());
-		newSurvey.setDescription(surveyDto.getDescription());
-		newSurvey.setUserData(userDataService.findById(userDataService.getCurrentUserId()));
-				
-		surveyService.create(newSurvey);
-		
-		return new ResponseEntity<Message>(new Message("Survey Created."), HttpStatus.OK);
 
+	@PreAuthorize("hasRole('USER')")
+	@GetMapping("/findall")
+	public List<Survey> findAllByIdUser() {
+		return surveyService.findAllSurveyByUserId(userDataService.getCurrentUserId());
 	}
 	
 	@PreAuthorize("hasRole('USER')")
-	@PostMapping("/create-questions-options/{id}")
-	public void createSurveyForm(@RequestBody List<Question> questions, @PathVariable Integer id) {
-	    List<Question> questionList = new ArrayList<>();
-	    Survey survey = surveyService.findById(id);
-	    
-	    for(Question question : questions) {
-	    	question.setSurvey(survey);
-	    	questionList.add(question);
-	    }    
-	    
-	    questionRepository.saveAll(questionList);
+	@GetMapping("/findbyid/{id}")
+	public Survey findById(@PathVariable Integer id) {
+			return surveyService.findById(id);
 	}
 
+	@PreAuthorize("hasRole('USER')")
+	@PostMapping("/create")
+	public ResponseEntity<Message> create(@RequestBody SurveyDto surveyDto) {
+		Survey newSurvey = new Survey();
+		newSurvey.setTitle(surveyDto.getTitle());
+		// newSurvey.setSubTitle(surveyDto.getSubTitle());
+		newSurvey.setDescription(surveyDto.getDescription());
+		newSurvey.setUserData(userDataService.findById(userDataService.getCurrentUserId()));
+
+		surveyService.create(newSurvey);
+
+		return new ResponseEntity<Message>(new Message("Survey Created."), HttpStatus.OK);
+
+	}
+
+	@PreAuthorize("hasRole('USER')")
+	@PostMapping("/create/surveyform/{id}")
+	public void createSurveyForm(@RequestBody List<Question> questions, @PathVariable Integer id) {
+		List<Question> questionList = new ArrayList<>();
+		List<Option> optionList = new ArrayList<>();
+
+		Survey survey = surveyService.findById(id);
+		
+		if(survey != null) {
+			for (Question question : questions) {
+				Question newQuestion = new Question();
+				newQuestion.setDescription(question.getDescription());
+				newQuestion.setSurvey(survey);
+				questionList.add(newQuestion);
 	
-	@PreAuthorize("hasRole('USER')")	
-	@GetMapping("/questions/{id}")
-	public Optional<Question> findQuestion(@PathVariable Integer id){
-		return questionRepository.findById(id);
+				for (Option option : question.getOptions()) {
+					Option newOption = new Option();
+					newOption.setDescription(option.getDescription());
+					newOption.setQuestion(newQuestion);
+					optionList.add(newOption);
+				}
+			}
+		}
+
+		questionRepository.saveAll(questionList);
+		optionRepository.saveAll(optionList);
 	}
 	
-	@PreAuthorize("hasRole('USER')")	
-	@GetMapping("/questions/options/{id}")
-	public Optional<Option> findOption(@PathVariable Integer id){
-		return optionRepository.findById(id);
+	@DeleteMapping("/delete/{id}")
+	public void deleteVyId(@PathVariable Integer id) {
+		surveyService.delete(id);
 	}
 	
-	@PreAuthorize("hasRole('USER')")	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/categories")
-	public List<Category> findAllCategories(){
+	public List<Category> findAllCategories() {
 		return categoryRepository.findAll();
 	}
 }

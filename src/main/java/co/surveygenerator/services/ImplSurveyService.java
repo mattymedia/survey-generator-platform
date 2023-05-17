@@ -39,4 +39,10 @@ public class ImplSurveyService implements ISurveyService {
 		return surveyRepository.findById(id).orElse(null);
 	}
 
+
+	@Override
+	public void delete(Integer id) {
+		surveyRepository.deleteById(id);
+	}
+
 }
