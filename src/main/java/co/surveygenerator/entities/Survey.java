@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -46,6 +47,7 @@ public class Survey implements Serializable {
 	private Category category;
 
 	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
+	@OrderBy("id ASC")
 	private List<Question> questions;
 
 	@Column(name = "create_at")

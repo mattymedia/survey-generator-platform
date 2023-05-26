@@ -17,7 +17,7 @@ public class ImplSurveyService implements ISurveyService {
 	
 	@Override
 	@Transactional
-	public Survey create(Survey survey) {
+	public Survey save(Survey survey) {
 		return surveyRepository.save(survey);
 	}
 

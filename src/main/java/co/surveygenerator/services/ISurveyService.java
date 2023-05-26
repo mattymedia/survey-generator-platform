@@ -12,7 +12,7 @@ public interface ISurveyService {
 	
 	public List<Survey> findAllSurveyByUserId(Integer integer);
 	
-	public Survey create(Survey survey);
+	public Survey save(Survey survey);
 	
 	public void delete(Integer id);
 	

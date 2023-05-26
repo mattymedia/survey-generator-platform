@@ -30,15 +30,15 @@ public class Option implements Serializable{
 	@JsonIgnore
 	private Question question;
 	
-	@Column(name = "is_selected")
-	private boolean isSelected = false;
+	@Column(name="code_option")
+	private String codeOption;
 	
 	public Option() {}
 
-	public Option(String description, Question question, boolean isSelected) {
+	public Option(String description, Question question, String codeOption) {
 		this.description = description;
 		this.question = question;
-		this.isSelected = isSelected;
+		this.codeOption = codeOption;
 	}
 
 	public Integer getId() {
@@ -65,12 +65,12 @@ public class Option implements Serializable{
 		this.question = question;
 	}
 
-	public boolean isSelected() {
-		return isSelected;
+	public String getCodeOption() {
+		return codeOption;
 	}
 
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
+	public void setCodeOption(String codeOption) {
+		this.codeOption = codeOption;
 	}
 	
 }
