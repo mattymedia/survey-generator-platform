@@ -21,7 +21,7 @@ public class ImplUploadFileService implements IUploadFileService {
 	
 	private final Logger log = LoggerFactory.getLogger(ImplUploadFileService.class);
 	
-	private final static String UPLOAD_PATH = "uploads/photos/";
+	private final static String UPLOAD_PATH = "/app/public/uploads/photos";
 	//https:\\drive.google.com\\drive\\folders\\1ptEOTOQY5IWaFxGQIDAEe16-MK4B0JlH?usp=share_link
 	
 	@Override
