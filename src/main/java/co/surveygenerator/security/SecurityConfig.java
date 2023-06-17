@@ -37,7 +37,8 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.cors().and().csrf().disable()
         .authorizeRequests()
-        .antMatchers("/surveygenerator/auth/**", "/userdata/list")
+        .antMatchers("/surveygenerator/auth/**", "/userdata/list", "/surveygenerator/surveys/findbycodesurvey/**"
+        		, "/surveygenerator/surveys/surveyresponse/**", "/surveygenerator/surveys/suggestion")
         .permitAll()
         .anyRequest().authenticated()
         .and()

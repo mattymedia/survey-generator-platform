@@ -1,19 +1,21 @@
 package co.surveygenerator.dto;
 
+import co.surveygenerator.entities.Category;
+
 public class SurveyDto {
 	
 	private String title;
-	
-	private String subTitle;
-	
+		
 	private String description;
+	
+	private Category category;
 	
 	public SurveyDto() {}
 	
-	public SurveyDto(String title, String subTitle, String description) {
+	public SurveyDto(String title, String description, Category category) {
 		this.title = title;
-		this.subTitle = subTitle;
 		this.description = description;
+		this.category = category;
 	}
 
 	public String getDescription() {
@@ -22,6 +24,14 @@ public class SurveyDto {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public String getTitle() {
@@ -32,11 +42,4 @@ public class SurveyDto {
 		this.title = title;
 	}
 
-	public String getSubTitle() {
-		return subTitle;
-	}
-
-	public void setSubTitle(String subTitle) {
-		this.subTitle = subTitle;
-	}
 }

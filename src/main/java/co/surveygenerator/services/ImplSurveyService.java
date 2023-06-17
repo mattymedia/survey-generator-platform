@@ -1,6 +1,7 @@
 package co.surveygenerator.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,15 @@ public class ImplSurveyService implements ISurveyService {
 		return surveyRepository.save(survey);
 	}
 
-	
 	@Override
 	public List<Survey> findAllSurveyByUserId(Integer userId) {
 		return surveyRepository.findAllSurveyByUserId(userId);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<Survey> findSurveyBycodeSurvey(String codeSurvey) {
+		return surveyRepository.findSurveyBycodeSurvey(codeSurvey);
 	}
 	
 	@Override
@@ -44,5 +50,4 @@ public class ImplSurveyService implements ISurveyService {
 	public void delete(Integer id) {
 		surveyRepository.deleteById(id);
 	}
-
 }

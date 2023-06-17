@@ -31,11 +31,10 @@ public class Survey implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(length = 500)
 	private String title;
 
-	@Column(name = "sub_title")
-	private String subTitle;
-
+	@Column(length = 1000)
 	private String description;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -49,6 +48,9 @@ public class Survey implements Serializable {
 	@OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
 	@OrderBy("id ASC")
 	private List<Question> questions;
+	
+	@Column(name = "code_survey")
+	private String codeSurvey;
 
 	@Column(name = "create_at")
 	private LocalDate createAt;
@@ -60,12 +62,12 @@ public class Survey implements Serializable {
 		this.id = id;
 	}
 
-	public Survey(String title, String subTitle, String description, Category category, List<Question> questions) {
+	public Survey(String title, String description, Category category, List<Question> questions, String codeSurvey) {
 		this.title = title;
-		this.subTitle = subTitle;
 		this.description = description;
 		this.category = category;
 		this.questions = questions;
+		this.codeSurvey = codeSurvey;
 	}
 
 	@PrePersist
@@ -87,14 +89,6 @@ public class Survey implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getSubTitle() {
-		return subTitle;
-	}
-
-	public void setSubTitle(String subTitle) {
-		this.subTitle = subTitle;
 	}
 
 	public String getDescription() {
@@ -119,6 +113,14 @@ public class Survey implements Serializable {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+	
+	public String getCodeSurvey() {
+		return codeSurvey;
+	}
+
+	public void setCodeSurvey(String codeSurvey) {
+		this.codeSurvey = codeSurvey;
 	}
 
 	public LocalDate getCreateAt() {

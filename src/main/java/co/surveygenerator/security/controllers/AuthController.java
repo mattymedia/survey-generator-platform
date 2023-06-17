@@ -1,5 +1,6 @@
 package co.surveygenerator.security.controllers;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -73,8 +74,12 @@ public class AuthController {
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody NewUser newUser, BindingResult bindingResult) {
+    	Optional<User> usernameAlreadyExists = userService.getByUsername(newUser.getUsername());
+    	if(usernameAlreadyExists.isPresent())
+            return new ResponseEntity<>(new Message("The username is already registered in the database, please enter another one."), HttpStatus.BAD_REQUEST);       
+	
         if (bindingResult.hasErrors())
-            return new ResponseEntity<>(new Message("Revise los campos e intente nuevamente"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("Please review the fields and try again."), HttpStatus.BAD_REQUEST);       
         System.out.println("new_user=" + newUser.getUsername());
         User user = new User(newUser.getUsername(), passwordEncoder.encode(newUser.getPassword()));
         UserData userData = new UserData();        
@@ -88,7 +93,7 @@ public class AuthController {
         userData.setUserId(user.getId());
         userDataService.save(userData);
         
-        return new ResponseEntity<>(new Message("Registro exitoso! Inicie sesión"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new Message("Successful registration, you can now log into the system."), HttpStatus.CREATED);
     }
     
     @PreAuthorize("hasRole('ADMIN')")

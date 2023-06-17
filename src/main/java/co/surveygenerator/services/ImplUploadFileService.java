@@ -21,7 +21,8 @@ public class ImplUploadFileService implements IUploadFileService {
 	
 	private final Logger log = LoggerFactory.getLogger(ImplUploadFileService.class);
 	
-	private final static String UPLOAD_PATH = "C:\\Users\\Maicol\\Desktop\\Proyecto_Encuestas\\front\\surveygenerator\\src\\assets\\photos";
+	private final static String UPLOAD_PATH = "C:\\SurveyGeneratorProject\\front\\surveygenerator\\src\\assets\\photos";
+	//https:\\drive.google.com\\drive\\folders\\1ptEOTOQY5IWaFxGQIDAEe16-MK4B0JlH?usp=share_link
 	
 	@Override
 	public Path getPath(String namePhoto) {
