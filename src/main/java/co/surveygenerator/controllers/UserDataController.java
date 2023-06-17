@@ -27,7 +27,7 @@ import co.surveygenerator.services.IUserDataService;
 
 @RestController
 @RequestMapping("/surveygenerator/userdata")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://surveygenerator-e23bf.web.app")
 public class UserDataController {
 
 	@Autowired
